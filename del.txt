@@ -1,0 +1,46 @@
+int bothcompare(){
+    string que[100],vue[100];
+    string found,confirm;
+    int glob,guard,checker;
+    int mainptg,b[100];
+    if(headc==NULL){
+        cout<<"nothing to see!";
+    }else{
+        ptr=headc;
+        newptr=headm;
+        fptr=headf;
+        int iq=0;
+
+        while(ptr->next!=NULL){
+            while(newptr->next!=NULL){
+                checker=0;
+                if(ptr->data!=newptr->data){
+                    int i=0,k=0;
+                    while(que[i]!=NULL){
+                    if(que[i]==newptr->data||vue[i]==newptr->data){k=1;}i++;}
+                    if(k<1){newptr=newptr->next;}
+                    iq++;
+                }
+                else{
+                    if(checker>guard){
+                    fptr->data=ptr->data;
+                    vue[glob]=ptr->data;
+                    guard++;
+                    glob++;
+                    fptr=fptr->next;
+                    }
+                    else{
+                        int j;
+                        while(que[j]!=NULL){
+                       if(que[j]==fptr->data=){fptr->data=que[j];que[j]=NULL;}j++;}
+                    }
+                    if(que[]!=NULL){
+                        newptr=headm;
+                    }
+                }
+            }
+            ptr=ptr->next;
+        }
+    }
+
+}
