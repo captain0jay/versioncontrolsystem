@@ -44,3 +44,8 @@ int bothcompare(){
     }
 
 }
+
+
+void delete_line(string,int);
+void overthrow(string,string);
+int prefrence();

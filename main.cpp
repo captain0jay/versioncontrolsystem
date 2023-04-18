@@ -19,8 +19,7 @@ node *fptr;
 node *ptrr;
 
 //comparecpp
-
-int bothcompare();
+int bothcompare(string,int);
 node* newNode(string data)
 {
     node* new_node = new node;
@@ -92,68 +91,6 @@ void newcompare(string prompt,int optt){
     bothcompare(prcname,optt);
 }
 
-int bothcompare(const string& file_name,int newopt){
-    string que[100],vue[100];
-    string found,confirm;
-    int glob,guard,checker;
-    int mainptg,b[100];
-    if(headc==NULL){
-        cout<<"nothing to see!";
-    }else{
-        ptr=headc;
-        newptr=headm;
-        fptr=headf;
-        int iq=0;
-
-        while(ptr->next!=NULL){
-            while(newptr->next!=NULL){
-                checker=0;
-                if(ptr->data!=newptr->data){
-                    vue[iq]=newptr->data;
-                    newptr=newptr->next;
-                    iq++;
-                }
-                else{
-                    fptr->data=ptr->data;
-                    fptr=fptr->next;
-                    int ip=0;
-                    while(ip<=iq){
-                        que[ip]=vue[ip];
-                        ip++;
-                    }
-                    int i;
-                    while(que[i]!=""){
-                        ptrr=headf;
-                        node* new_node = newNode(que[i]);
-                        new_node->next=headf;
-                        headf=new_node;
-                        i++;
-                    }
-                }
-            }
-            ptr=ptr->next;
-        }
-    }
-    fptr=headf;
-    cout<<"Here's the changes:-\n";
-    while(fptr->next!=NULL){
-        cout<<fptr->data<<"\n";
-        fptr=fptr->next;
-    }
-    int anss;
-    cout<<"What do you wanna do?\n1. Merge \n2. Reject\nanswer:-";
-    cin>>anss;
-    if(anss==2){
-        delete_line(file_name,newopt);
-    }else{
-        overthrow(file_name,"./files/mainfile.txt");
-        delete_line(file_name,newopt);
-        prefrence();
-    }
-    return 0;
-
-}
-
 void overthrow(const string& file_name, const string& sourcefile_name){
     ifstream inputFile(sourcefile_name);
     ofstream outputFile(file_name, ios::trunc);
@@ -187,6 +124,59 @@ void delete_line(const string& file_name, int n) {
     remove(file_name.c_str());
     rename("temp.txt", file_name.c_str());
 }
+
+int bothcompare(string file_name,int newopt){
+    string que[100],vue[100];
+    string newstr,oldstr;
+    if(headc==NULL){
+        cout<<"nothing to see!";
+    }else{
+        ptr=headc;
+        newptr=headm;
+        fptr=headf;
+        while(ptr->next!=NULL){
+            int turn = 0;
+            while(newptr->next!=NULL){
+                while(newptr->next!=NULL){
+                    if(ptr->data==newptr->data){turn=1;}
+                    newptr=newptr->next;
+                }
+                if(turn==0){
+                    newstr = "New:"+ptr->data;
+                    fptr->data=newstr;
+                    fptr=fptr->next;
+                    newptr=headm;
+                }
+                if(ptr->data!=newptr->data&&turn==1){
+                    oldstr="Old:"+newptr->data;
+                    fptr->data=oldstr;
+                    fptr=fptr->next;
+                    newptr=newptr->next;
+                }
+            }
+            ptr=ptr->next;
+        }
+    }
+    fptr=headf;
+    cout<<"Here's the changes:-\n";
+    while(fptr->next!=NULL){
+        cout<<fptr->data<<"\n";
+        fptr=fptr->next;
+    }
+    int anss;
+    cout<<"What do you wanna do?\n1. Merge \n2. Reject\nanswer:-";
+    cin>>anss;
+    if(anss==2){
+        delete_line(file_name,newopt);
+    }else{
+        overthrow(file_name,"./files/mainfile.txt");
+        delete_line(file_name,newopt);
+        //prefrence();
+    }
+    return 0;
+
+}
+
 
 //maincpp
 void normal(int);
