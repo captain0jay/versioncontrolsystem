@@ -17,7 +17,9 @@ node* headf = NULL;
 node *newptr;
 node *fptr;
 node *ptrr;
-
+node *oldptr;
+node *oooldptr;
+node *nnewptr;
 //comparecpp
 int bothcompare(string,int);
 node* newNode(string data)
@@ -35,7 +37,7 @@ void insertend(string numin,node **head){
     }
     else{
         ptr=*head;
-        while(ptr->next==NULL){
+        while(ptr->next!=NULL){
             ptr=ptr->next;
         }
         ptr->next=new_node;       
@@ -78,16 +80,22 @@ void newcompare(string prompt,int optt){
         cerr << "Error opening waitlist.txt" << endl;
         return;
     }
-    string line;
-    while (getline(checkfile, line)) {
+    string line="O";
+    while (!line.empty()) {
+        getline(checkfile, line);
         insertend(line,&headc);
     }
-    string linetwo;
-    while(getline(mainfile,linetwo)){
+    string linetwo="o";
+    string linepst;
+    while(!linetwo.empty()&&linepst!=linetwo){
+        linepst=linetwo;
+        getline(mainfile,linetwo);
+        cout<<linetwo;
         insertend(linetwo,&headm);
     }
     mainfile.close();
     checkfile.close();
+    cout<<"newcompare running fine...";
     bothcompare(prcname,optt);
 }
 
@@ -125,37 +133,60 @@ void delete_line(const string& file_name, int n) {
     rename("temp.txt", file_name.c_str());
 }
 
+void deletenode(string gotstr){
+    oldptr=headm;
+    while(oldptr->next!=NULL){
+    if(oldptr->data!=gotstr){
+        oooldptr=oldptr;
+        oldptr=oldptr->next;
+    }else{
+        oooldptr->next=oldptr->next;
+        free(oldptr);
+    }
+    }
+}
 int bothcompare(string file_name,int newopt){
-    string newstr,oldstr;
+    cout<<"bothcompare running....";
+    string newstr,oldstr,delstr;
     if(headc==NULL){
         cout<<"nothing to see!";
     }else{
         ptr=headc;
         newptr=headm;
+        nnewptr=headm;
         fptr=headf;
         while(ptr->next!=NULL){
             int turn = 0;
-            while(newptr->next!=NULL){
-                while(newptr->next!=NULL){
-                    if(ptr->data==newptr->data){turn=1;}
-                    newptr=newptr->next;
-                }
-                if(turn==0){
+            while(nnewptr->next!=NULL){
+                    if(ptr->data==nnewptr->data){turn=1;}
+                    nnewptr=nnewptr->next;
+            }
+            cout<<turn;
+            nnewptr=headm;
+            if(turn==0){
                     newstr = "New:"+ptr->data;
-                    fptr->data=newstr;
-                    fptr=fptr->next;
-                    newptr=headm;
-                }
+                    cout<<newstr;
+                    insertend(newstr,&headf);
+            }else{
+            while(newptr->next!=NULL){
+                cout<<"after rebooot...";
                 if(ptr->data!=newptr->data&&turn==1){
+                    delstr="Del:"+newptr->data;
+                    //deletenode(newptr->data);
+                    insertend(delstr,&headf);
+                    newptr=newptr->next;
+                }else if(ptr->data==newptr->data&&turn==1){
                     oldstr="Old:"+newptr->data;
-                    fptr->data=oldstr;
-                    fptr=fptr->next;
+                    //deletenode(newptr->data);
+                    insertend(oldstr,&headf);
                     newptr=newptr->next;
                 }
+            }
             }
             ptr=ptr->next;
         }
     }
+    cout<<"ran";
     fptr=headf;
     cout<<"Here's the changes:-\n";
     while(fptr->next!=NULL){
