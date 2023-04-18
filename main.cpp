@@ -126,7 +126,6 @@ void delete_line(const string& file_name, int n) {
 }
 
 int bothcompare(string file_name,int newopt){
-    string que[100],vue[100];
     string newstr,oldstr;
     if(headc==NULL){
         cout<<"nothing to see!";
