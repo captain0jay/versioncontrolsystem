@@ -99,17 +99,28 @@ void newcompare(string prompt,int optt){
     bothcompare(prcname,optt);
 }
 
-void overthrow(const string& file_name, const string& sourcefile_name){
-    ifstream inputFile(sourcefile_name);
-    ofstream outputFile(file_name, ios::trunc);
+void overthrow(string file_name,string sourcefile_name,string verr){
+    ifstream inputFile(file_name);
+    ofstream outputFile(sourcefile_name, ios::trunc);
 
     if (!inputFile || !outputFile) {
         cerr << "Error opening files" << endl;
     }
+
+    string customname="./db/logs/"+verr+".txt";
+    ofstream destinationFile(customname, ios::out | ios::app); // Open the destination file for appending
+    if (!destinationFile.is_open()) {
+        cerr << "Error opening destination file: " << customname << endl;
+        return;
+    }
+
     string line;
     while (getline(inputFile, line)) {
         outputFile << line << '\n';
+        destinationFile << line << '\n';
     }
+
+    destinationFile.close();
     inputFile.close();
     outputFile.close();
 }
@@ -133,20 +144,10 @@ void delete_line(const string& file_name, int n) {
     rename("temp.txt", file_name.c_str());
 }
 
-void deletenode(string gotstr){
-    oldptr=headm;
-    while(oldptr->next!=NULL){
-    if(oldptr->data!=gotstr){
-        oooldptr=oldptr;
-        oldptr=oldptr->next;
-    }else{
-        oooldptr->next=oldptr->next;
-        free(oldptr);
-    }
-    }
-}
 int bothcompare(string file_name,int newopt){
     cout<<"bothcompare running....";
+    int globb=1;
+    string confirm;
     string newstr,oldstr,delstr;
     if(headc==NULL){
         cout<<"nothing to see!";
@@ -167,23 +168,31 @@ int bothcompare(string file_name,int newopt){
                     newstr = "New:"+ptr->data;
                     cout<<newstr;
                     insertend(newstr,&headf);
+                    //ptr=ptr->next;
             }else{
             while(newptr->next!=NULL){
                 cout<<"after rebooot...";
                 if(ptr->data!=newptr->data&&turn==1){
+                    cout<<ptr->data<<","<<newptr->data<<"\n";
                     delstr="Del:"+newptr->data;
-                    //deletenode(newptr->data);
                     insertend(delstr,&headf);
+                    globb++;
                     newptr=newptr->next;
                 }else if(ptr->data==newptr->data&&turn==1){
                     oldstr="Old:"+newptr->data;
-                    //deletenode(newptr->data);
                     insertend(oldstr,&headf);
-                    newptr=newptr->next;
+                    globb++;
+                    newptr=headm;
+                    for(int i=1;i<globb;i++){
+                        newptr=newptr->next;
+                    }
+                    //confirm="true";
                 }
             }
             }
             ptr=ptr->next;
+            //confirm="false";
+            turn=0;
         }
     }
     cout<<"ran";
@@ -199,7 +208,10 @@ int bothcompare(string file_name,int newopt){
     if(anss==2){
         delete_line(file_name,newopt);
     }else{
-        overthrow(file_name,"./files/mainfile.txt");
+        string verr;
+        cout<<"Name the version:-";
+        cin>>verr;
+        overthrow(file_name,"./files/mainfile.txt",verr);
         delete_line(file_name,newopt);
         //prefrence();
     }

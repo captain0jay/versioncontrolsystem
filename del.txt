@@ -49,3 +49,26 @@ int bothcompare(){
 void delete_line(string,int);
 void overthrow(string,string);
 int prefrence();
+
+
+oldptr=headm;
+                    while(oldptr->next!=NULL){
+                        if(oldptr!=newptr){
+                            oooldptr=oldptr;
+                            oldptr=oldptr->next;
+                        }else{
+                            oooldptr->next=oldptr->next;
+                            free(oldptr);
+                        }
+                    }
+
+                    oldptr=headm;
+                    while(oldptr->next!=NULL){
+                        if(oldptr!=newptr){
+                            oooldptr=oldptr;
+                            oldptr=oldptr->next;
+                        }else{
+                            oooldptr->next=oldptr->next;
+                            free(oldptr);
+                        }
+                    }
