@@ -3,7 +3,7 @@
 #include <string>
 //#include "compare.h"
 using namespace std;
-//using std::string;
+//using string;
 struct node{
     string data;
     node *next;
@@ -66,7 +66,7 @@ void instspec(string numin,int po,node **head){
     }
 }
 
-void newcompare(string prompt){
+void newcompare(string prompt,int optt){
     string prcname;
     ifstream mainfile("./files/mainfile.txt", ios::in);
     if (!mainfile.is_open()) {
@@ -89,10 +89,10 @@ void newcompare(string prompt){
     }
     mainfile.close();
     checkfile.close();
-    bothcompare();
+    bothcompare(prcname,optt);
 }
 
-int bothcompare(){
+int bothcompare(const string& file_name,int newopt){
     string que[100],vue[100];
     string found,confirm;
     int glob,guard,checker;
@@ -134,16 +134,59 @@ int bothcompare(){
             ptr=ptr->next;
         }
     }
-    newptr=headm;
+    fptr=headf;
     cout<<"Here's the changes:-\n";
-    while(newptr->next!=NULL){
-        cout<<newptr->data<<"\n";
-        newptr=newptr->next;
+    while(fptr->next!=NULL){
+        cout<<fptr->data<<"\n";
+        fptr=fptr->next;
+    }
+    int anss;
+    cout<<"What do you wanna do?\n1. Merge \n2. Reject\nanswer:-";
+    cin>>anss;
+    if(anss==2){
+        delete_line(file_name,newopt);
+    }else{
+        overthrow(file_name,"./files/mainfile.txt");
+        delete_line(file_name,newopt);
+        prefrence();
     }
     return 0;
 
 }
 
+void overthrow(const string& file_name, const string& sourcefile_name){
+    ifstream inputFile(sourcefile_name);
+    ofstream outputFile(file_name, ios::trunc);
+
+    if (!inputFile || !outputFile) {
+        cerr << "Error opening files" << endl;
+    }
+    string line;
+    while (getline(inputFile, line)) {
+        outputFile << line << '\n';
+    }
+    inputFile.close();
+    outputFile.close();
+}
+
+void delete_line(const string& file_name, int n) {
+    ifstream is(file_name);
+    ofstream ofs("temp.txt", ofstream::out);
+    char c;
+    int line_no = 1;
+    while (is.get(c)) {
+        if (c == '\n') {
+            line_no++;
+        }
+        if (line_no != n) {
+            ofs << c;
+        }
+    }
+    ofs.close();
+    is.close();
+    remove(file_name.c_str());
+    rename("temp.txt", file_name.c_str());
+}
 
 //maincpp
 void normal(int);
@@ -196,7 +239,7 @@ void updates(){
     cout<<"Which one would you like me to display changes for you?";
     cin>>option;
     prompt=a[option-1];
-    newcompare(prompt);
+    newcompare(prompt,option);
 }
 
 void fork(string filename){
@@ -240,7 +283,7 @@ void waitlist(const string& srcName) {
     waitlistFile.close();
 }
 
-void commit(string filename){
+void push(string filename){
     string srcname;
     srcname=filename+".txt";
     waitlist(srcname);
@@ -253,7 +296,7 @@ string filename;
 if(ans==1||ans==2){cout<<"Emter filename:";cin>>filename;}
 switch(ans){
     case 1: fork(filename); break;
-    case 2: commit(filename); break;
+    case 2: push(filename); break;
     default: cout<<"Wrong option selected try again!";prefrence(); break;
 }
 }
@@ -264,7 +307,7 @@ if(ans==3||ans==2){cout<<"Emter filename:";cin>>filename;}
 switch(ans){
     case 1: updates(); break;
     case 2: fork(filename); break;
-    case 3: commit(filename); break;
+    case 3: push(filename); break;
     default: cout<<"Wrong option selected try again!";prefrence(); break;
 }
 }
