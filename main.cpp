@@ -36,11 +36,11 @@ void insertend(string numin,node **head){
         *head = new_node;
     }
     else{
-        ptr=*head;
-        while(ptr->next!=NULL){
-            ptr=ptr->next;
+        ptrr=*head;
+        while(ptrr->next!=NULL){
+            ptrr=ptrr->next;
         }
-        ptr->next=new_node;       
+        ptrr->next=new_node;       
     }
 }
 
@@ -90,12 +90,10 @@ void newcompare(string prompt,int optt){
     while(!linetwo.empty()&&linepst!=linetwo){
         linepst=linetwo;
         getline(mainfile,linetwo);
-        cout<<linetwo;
         insertend(linetwo,&headm);
     }
     mainfile.close();
     checkfile.close();
-    cout<<"newcompare running fine...";
     bothcompare(prcname,optt);
 }
 
@@ -145,7 +143,6 @@ void delete_line(const string& file_name, int n) {
 }
 
 int bothcompare(string file_name,int newopt){
-    cout<<"bothcompare running....";
     int globb=1;
     string confirm;
     string newstr,oldstr,delstr;
@@ -171,9 +168,7 @@ int bothcompare(string file_name,int newopt){
                     //ptr=ptr->next;
             }else{
             while(newptr->next!=NULL){
-                cout<<"after rebooot...";
                 if(ptr->data!=newptr->data&&turn==1){
-                    cout<<ptr->data<<","<<newptr->data<<"\n";
                     delstr="Del:"+newptr->data;
                     insertend(delstr,&headf);
                     globb++;
@@ -186,16 +181,18 @@ int bothcompare(string file_name,int newopt){
                     for(int i=1;i<globb;i++){
                         newptr=newptr->next;
                     }
-                    //confirm="true";
+                    ptr=ptr->next;
+                    if(ptr->next==NULL){
+                        break;
+                    }
                 }
             }
             }
-            ptr=ptr->next;
-            //confirm="false";
+            if(ptr->next!=NULL){
+            ptr=ptr->next;}
             turn=0;
         }
     }
-    cout<<"ran";
     fptr=headf;
     cout<<"Here's the changes:-\n";
     while(fptr->next!=NULL){
@@ -229,7 +226,7 @@ int prefrence(){
     cout<<"input your username:";
     cin>>username;
     if(username!="admin"){
-        cout<<"What do you wanna do?:";
+        cout<<"What do you wanna do?:\n";
         cout<<"1. Fork\n2. Push/Commit\n:-";
         cin>>answer;
         normal(answer);
@@ -347,6 +344,5 @@ switch(ans){
 
 
 int main(){
-    cout<<"runnin...";
     prefrence();
 }
